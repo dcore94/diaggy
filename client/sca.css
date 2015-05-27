@@ -1,0 +1,41 @@
+.composite {
+	fill:lightgray;
+	stroke-width:1;
+	stroke:#333333;
+}
+
+.component {
+	fill:rgb(0,100,195);
+	stroke-width:1;
+	stroke:#333333;
+}
+
+.service {
+	fill:rgb(0,155,10);
+	stroke-width:1;
+	stroke:#333333;
+}
+
+.reference {
+	fill:rgb(200,155,10);
+	stroke-width:1;
+	stroke:#333333;
+}
+
+.property {
+	fill:yellow;
+	stroke-width:1;
+	stroke:#333333;
+}
+
+.implementation {
+	fill:dd1111;
+	stroke-width:1;
+	stroke:#333333;
+}
+
+.wire {
+	stroke-width:2;
+	stroke:black;
+    fill:none;
+}

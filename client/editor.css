@@ -1,0 +1,41 @@
+#SCAFRAME{
+	position:absolute;
+	top:10px;
+	left:0px;
+	width:500px;
+	height:500px;
+	border: solid black 2px;
+}
+
+#SVGFRAME{
+	position:absolute;
+	top:10px;
+	left:510px;
+	width:1000px;
+	height:95%;
+}
+
+#SCAEDITOR{
+	width:100%;
+	height:100%;
+	background-color: wheat;
+}
+
+#SVGEDITOR{
+	width:100%;
+	height:100%;
+}
+
+#LOG{
+	position:absolute;
+	top:510px;
+	left:0px;
+	width:500px;
+	height:200px;
+	border: solid black 2px;
+}
+
+.errors{
+	width:8px;
+	height:8px;
+}
