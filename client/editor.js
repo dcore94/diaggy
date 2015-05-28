@@ -1,3 +1,19 @@
+function getProfile(){
+	return document.getElementById("PROFILE_SELECTOR").value
+}
+
+function getTemplateUrl(){
+	return "/diaggy/template/" + getProfile() 
+}
+
+function getValidateUrl(){
+	return "/diaggy/validate/" + getProfile() 
+}
+
+function getRenderUrl(){
+	return "/diaggy/render/" + getProfile() 
+}
+
 function ignoreerrorcb(error, data, xhr){
 	return
 }

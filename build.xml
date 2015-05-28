@@ -1,0 +1,27 @@
+<project name="diaggy" default="all">
+
+	<property name="deploylocation" value="/tmp/basex/webapp"/>
+	<property name="deploylocation.static" value="/tmp/basex/webapp/static"/>
+	
+	<target name="all" depends="clean, deploy">
+	</target>
+	
+	<target name="deploy">
+		<copy todir="${deploylocation}/diaggy">
+			<fileset dir="server"/>
+		</copy>
+		<copy todir="${deploylocation.static}/diaggy">
+			<fileset dir="client"/>
+		</copy>
+		<copy todir="${deploylocation.static}/codemirror-4.7">
+			<fileset dir="lib/codemirror-4.7"/>
+		</copy>
+	</target>
+	
+	<target name="clean">
+		<delete dir="${deploylocation}/diaggy"/>
+		<delete dir="${deploylocation.static}/diaggy"/>
+		<delete dir="${deploylocation.static}/codemirror-4.7"/>
+	</target>
+	
+</project>

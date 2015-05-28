@@ -176,7 +176,7 @@ declare function _:render-wires($wires as element(sca:wire)*, $uicomponents as e
 
 declare function _:compute-layouts($wires as element(sca:wire)*, $components as element()*){
   let $levels :=
-  map:new(
+  map:merge(
     for $w in $wires
     let $tgt := tokenize($w/@target, "/")[1]
     group by $tgt

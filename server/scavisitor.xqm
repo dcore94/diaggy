@@ -35,9 +35,9 @@ declare function _:visit-composite($composite as element()){
       _:visit-components($composite),
       _:visit-wires($composite)
     ),
-    { "name" := $composite/string(@name),
-      "width" := $_:COMPOSITE_WIDTH, "height" := $_:COMPOSITE_HEIGHT, "draggable" := "true", 
-      "title" := $composite/string(@name), "description" := $composite/string(@name)})
+    map { "name" : $composite/string(@name),
+	      "width" : $_:COMPOSITE_WIDTH, "height" : $_:COMPOSITE_HEIGHT, "draggable" : "true", 
+	      "title" : $composite/string(@name), "description" : $composite/string(@name)})
 };
 
 declare function _:visit-components($composite as element()){
@@ -54,9 +54,9 @@ declare function _:visit-component($component as element()){
       _:visit-references($component),
       _:visit-properties($component)
     )),
-    { "name" := $component/string(@name), "class" := "scacomponent",
-      "width" := $_:COMPONENT_WIDTH, "height" := $_:COMPONENT_HEIGHT, "draggable" := "true", 
-      "title" := $component/string(@name), "description" := $component/string(@name)})
+    map {"name" : $component/string(@name), "class" : "scacomponent",
+      	 "width" : $_:COMPONENT_WIDTH, "height" : $_:COMPONENT_HEIGHT, "draggable" : "true", 
+      	 "title" : $component/string(@name), "description" : $component/string(@name)})
 };
 
 declare function _:visit-services($component as element()){
@@ -69,9 +69,9 @@ declare function _:visit-service($service as element()){
     (<polygon points="{$_:ARROW_POINTS}"/>,
      <text x="5%" y="40%">{$service/string(@name)}</text>,
     ()),
-    { "name" := $service/string(@name), "class" := "scaservice",
-      "width" := $_:ARROW_LENGTH, "height" := $_:ARROW_HEIGHT, "y" := "{5 * $_:SPACING}", "x" := "0",
-      "title" := $service/string(@name), "description" := $service/string(@name)})
+    map {"name" : $service/string(@name), "class" : "scaservice",
+      	 "width" : $_:ARROW_LENGTH, "height" : $_:ARROW_HEIGHT, "y" : "{5 * $_:SPACING}", "x" : "0",
+      	 "title" : $service/string(@name), "description" : $service/string(@name)})
 };
 
 declare function _:visit-references($component as element()){
@@ -84,9 +84,9 @@ declare function _:visit-reference($reference as element()){
     (<polygon points="{$_:ARROW_POINTS}"/>,
      <text x="5%" y="40%">{$reference/string(@name)}</text>,
     ()),
-    { "name" := $reference/string(@name), "class" := "scareference",
-      "width" := $_:ARROW_LENGTH, "height" := $_:ARROW_HEIGHT, "y" := "{5 * $_:SPACING}", "x" := "100%",
-      "title" := $reference/string(@name), "description" := $reference/string(@name)})
+    map {"name" : $reference/string(@name), "class" : "scareference",
+      	 "width" : $_:ARROW_LENGTH, "height" : $_:ARROW_HEIGHT, "y" : "{5 * $_:SPACING}", "x" : "100%",
+      	 "title" : $reference/string(@name), "description" : $reference/string(@name)})
 };
 
 declare function _:visit-properties($component as element()){
@@ -99,10 +99,10 @@ declare function _:visit-property($property as element()){
     (<rect width="100%" height="100%"/>,
      <text y="{$_:PROPERTY_HEIGHT}">{$property/string(@name)}</text>,
     ()),
-    { "name" := $property/string(@name), "class" := "scaproperty",
-      "width" := $_:PROPERTY_WIDTH, "height" := $_:ARROW_HEIGHT, 
-      "title" := $property/string(@name) || "=" || $property/string(@value), 
-      "description" := $property/string(@name) || "=" || $property/string(@value)})
+    map {"name" : $property/string(@name), "class" : "scaproperty",
+         "width" : $_:PROPERTY_WIDTH, "height" : $_:ARROW_HEIGHT, 
+         "title" : $property/string(@name) || "=" || $property/string(@value), 
+         "description" : $property/string(@name) || "=" || $property/string(@value)})
 };
 
 
@@ -114,7 +114,7 @@ declare function _:visit-wires($composite as element()){
 
 declare function _:visit-wire($wire as element()){
   svg:build-wire(
-    $wire/string(@source), $wire/string(@target), map{ "path" := <path d="M0,0 L10,0 L10,10, L0,10"/>}
+    $wire/string(@source), $wire/string(@target), map{ "path" : <path d="M0,0 L10,0 L10,10, L0,10"/>}
   )
 };
 

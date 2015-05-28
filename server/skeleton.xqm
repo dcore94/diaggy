@@ -1,8 +1,8 @@
 module namespace sk = "urn:dcore:diaggy:skeleton";
 import module namespace sca = "urn:dcore:diaggy:profile:sca" at "sca.xqm";
 
-declare variable $sk:IMPL := {
-  "sca" := "urn:dcore:diaggy:profile:sca"
+declare variable $sk:IMPL := map {
+  "sca" : "urn:dcore:diaggy:profile:sca"
 };
 
 declare function sk:get-implforprofile($profile as xs:string, $operation as xs:string, $arity as xs:integer){
