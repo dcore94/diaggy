@@ -1,34 +1,42 @@
-.composite {
-	fill:lightgray;
-	stroke-width:1;
-	stroke:#333333;
+svg > text {
+	fill: black;
+	stroke: black;
 }
 
-.component {
-	fill:rgb(0,100,195);
+.composite.scacomposite {
+	fill:#81d4fa;
 	stroke-width:1;
 	stroke:#333333;
+	cursor: move;
 }
 
-.service {
+.composite.scacomponent {
+	fill:#4fc3f7;
+	stroke-width:1;
+	stroke:#333333;
+	cursor: move;
+}
+
+.component.scaservice {
 	fill:rgb(0,155,10);
 	stroke-width:1;
 	stroke:#333333;
+	cursor: arrow;
 }
 
-.reference {
-	fill:rgb(200,155,10);
+.component.scareference {
+	fill:rgb(200,155,155);
 	stroke-width:1;
 	stroke:#333333;
 }
 
-.property {
+.component.scaproperty {
 	fill:yellow;
 	stroke-width:1;
 	stroke:#333333;
 }
 
-.implementation {
+.component.implementation {
 	fill:dd1111;
 	stroke-width:1;
 	stroke:#333333;

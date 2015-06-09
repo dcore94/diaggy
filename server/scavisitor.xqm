@@ -1,108 +1,125 @@
 module namespace _ = "urn:dcore:diaggy:visitor:sca";
 
-import module namespace svg = "urn:dcore:diaggy:builder:svg" at "svgbuilder.xqm";
+import module namespace const = "urn:dcore:diaggy:constants:sca" at "scaconstants.xqm";
 
 declare namespace sca = "http://docs.oasis-open.org/ns/opencsa/sca/200903";
 
-declare variable $_:SPACING := 10;
-
-declare variable $_:ARROW_LENGTH := 40;
-declare variable $_:ARROW_HEIGHT := 20;
-declare variable $_:ARROW_LENGTH_HALF := $_:ARROW_LENGTH div 2;
-declare variable $_:ARROW_HEIGHT_HALF := $_:ARROW_HEIGHT div 2;
-declare variable $_:ARROW_OFFSET := $_:ARROW_LENGTH_HALF;
-declare variable $_:ARROW_OFFSET_NEG := - $_:ARROW_OFFSET;
-declare variable $_:ARROW_POINTS := "0,0 30,0 40,10 30,20 0,20 10,10";
-
-declare variable $_:COMPOSITE_WIDTH := 300;
-declare variable $_:COMPOSITE_HEIGHT := 150;
-declare variable $_:COMPONENT_WIDTH := 150;
-declare variable $_:COMPONENT_HEIGHT := 100;
-declare variable $_:PROPERTY_WIDTH := 20;
-declare variable $_:PROPERTY_HEIGHT := 30;
-
-declare function _:visit($sca as node()){
-  svg:build-root(
-    for $composite in $sca/sca:composite
-    return _:visit-composite($composite), map{}
-  )
+declare function _:visit($sca as node()) as map(*){
+  let $composites := $sca/sca:composite
+  for $composite at $pos in $composites
+  return _:visit-composite($composite, $pos, count($composites))
 };
 
-declare function _:visit-composite($composite as element()){
-  svg:build-composite(
-    (<rect rx="10" ry="10" width="100%" height="100%"/>,
-     <text x="10%" y="13%">{$composite/string(@name)}</text>,
-      _:visit-components($composite),
-      _:visit-wires($composite)
-    ),
-    map { "name" : $composite/string(@name),
-	      "width" : $_:COMPOSITE_WIDTH, "height" : $_:COMPOSITE_HEIGHT, "draggable" : "true", 
-	      "title" : $composite/string(@name), "description" : $composite/string(@name)})
+declare function _:visit-composite($composite as element(),  $pos as xs:integer, $count as xs:integer) as map(*){
+  let $components := _:visit-components($composite)
+  let $properties := _:visit-properties($composite)
+  let $ast:= map {
+        "components" : $components,
+        "properties" : $properties,
+        "name" : $composite/string(@name),
+        "class" : "scacomposite",
+        "draggable" : "true", 
+        "title" : $composite/string(@name), 
+        "description" : $composite/string(@name),
+
+        "width" : $const:COMPOSITE_WIDTH, 
+        "height" : $const:COMPOSITE_HEIGHT
+  }
+  let $ast := _:estimate-composite-width($ast)
+  let $ast := _:estimate-composite-height($ast)
+  return $ast
 };
 
-declare function _:visit-components($composite as element()){
-  for $component in $composite/sca:component
-  return _:visit-component($component)
+declare function _:visit-components($composite as element()) as map(*)*{
+  let $components := $composite/sca:component
+  for $component at $pos in $components
+  return _:visit-component($component, $pos, count($components))
 };
 
-declare function _:visit-component($component as element()){
-  svg:build-composite(
-    (<rect rx="10" ry="10" width="100%" height="100%"/>,
-     <text x="10%" y="13%">{$component/string(@name)}</text>,
-    (
-      _:visit-services($component), 
-      _:visit-references($component),
-      _:visit-properties($component)
-    )),
-    map {"name" : $component/string(@name), "class" : "scacomponent",
-      	 "width" : $_:COMPONENT_WIDTH, "height" : $_:COMPONENT_HEIGHT, "draggable" : "true", 
-      	 "title" : $component/string(@name), "description" : $component/string(@name)})
+declare function _:visit-component($component as element(), $pos as xs:integer, $count as xs:integer) as map(*){
+  let $services := _:visit-services($component)
+  let $references := _:visit-references($component)
+  let $properties := _:visit-properties($component)
+  let $ast := map {
+      "services" : $services,
+      "references" : $references,
+      "properties" : $properties,
+      "name" : $component/string(@name), 
+      "class" : "scacomponent",
+      "draggable" : "true", 
+      "title" : $component/string(@name), 
+      "description" : $component/string(@name), 
+      "height" : $const:COMPONENT_HEIGHT, 
+      "x" : 10, 
+      "y" : 20 
+  }
+  let $ast := _:estimate-component-width($ast)
+  let $ast := _:estimate-component-height($ast)
+  return $ast
 };
 
-declare function _:visit-services($component as element()){
-  for $service in $component/sca:service
-  return _:visit-service($service)
+declare function _:visit-services($component as element()) as map(*)*{
+  let $services := $component/sca:service
+  for $service at $pos in $services
+  return _:visit-service($service, $pos, count($services))
 };
 
-declare function _:visit-service($service as element()){
-  svg:build-component(
-    (<polygon points="{$_:ARROW_POINTS}"/>,
-     <text x="5%" y="40%">{$service/string(@name)}</text>,
-    ()),
-    map {"name" : $service/string(@name), "class" : "scaservice",
-      	 "width" : $_:ARROW_LENGTH, "height" : $_:ARROW_HEIGHT, "y" : "{5 * $_:SPACING}", "x" : "0",
-      	 "title" : $service/string(@name), "description" : $service/string(@name)})
+declare function _:visit-service($service as element(),  $pos as xs:integer, $count as xs:integer) as map(*){
+  let $ast := map {
+      "name" : $service/string(@name), 
+      "class" : "scaservice", 
+      "draggable" : "false",
+      "width" : $const:ARROW_LENGTH, 
+      "height" : $const:ARROW_HEIGHT, 
+      "y" : $const:PROPERTY_HEIGHT + $const:SPACING + ($pos - 1) * ($const:ARROW_HEIGHT + $const:SPACING),
+      "x" : 0,
+      "title" : $service/string(@name), 
+      "description" : $service/string(@name)
+  }
+  return $ast
+  
 };
 
-declare function _:visit-references($component as element()){
-  for $reference in $component/sca:reference
-  return _:visit-reference($reference)
+declare function _:visit-references($component as element()) as map(*)*{
+  let $references := $component/sca:reference
+  for $reference at $pos in $references 
+  return _:visit-reference($reference, $pos, count($references))
 };
 
-declare function _:visit-reference($reference as element()){
-  svg:build-component(
-    (<polygon points="{$_:ARROW_POINTS}"/>,
-     <text x="5%" y="40%">{$reference/string(@name)}</text>,
-    ()),
-    map {"name" : $reference/string(@name), "class" : "scareference",
-      	 "width" : $_:ARROW_LENGTH, "height" : $_:ARROW_HEIGHT, "y" : "{5 * $_:SPACING}", "x" : "100%",
-      	 "title" : $reference/string(@name), "description" : $reference/string(@name)})
+declare function _:visit-reference($reference as element(), $pos as xs:integer, $count as xs:integer) as map(*){
+  let $ast := map {
+      "name" : $reference/string(@name), 
+      "class" : "scareference", 
+      "draggable" : "false",
+      "width" : $const:ARROW_LENGTH, 
+      "height" : $const:ARROW_HEIGHT, 
+      "y" : $const:PROPERTY_HEIGHT + $const:SPACING + ($pos - 1) * ($const:ARROW_HEIGHT + $const:SPACING), 
+      "x" : "100%",
+      "title" : $reference/string(@name), 
+      "description" : $reference/string(@name)
+  }
+  return $ast
 };
 
-declare function _:visit-properties($component as element()){
-  for $property in $component/sca:property
-  return _:visit-property($property)
+declare function _:visit-properties($component as element()) as map(*)*{
+  let $properties := $component/sca:property
+  for $property at $pos in $properties
+  return _:visit-property($property, $pos, count($properties))
 };
 
-declare function _:visit-property($property as element()){
-  svg:build-component(
-    (<rect width="100%" height="100%"/>,
-     <text y="{$_:PROPERTY_HEIGHT}">{$property/string(@name)}</text>,
-    ()),
-    map {"name" : $property/string(@name), "class" : "scaproperty",
-         "width" : $_:PROPERTY_WIDTH, "height" : $_:ARROW_HEIGHT, 
-         "title" : $property/string(@name) || "=" || $property/string(@value), 
-         "description" : $property/string(@name) || "=" || $property/string(@value)})
+declare function _:visit-property($property as element(), $pos as xs:integer, $count as xs:integer) as map(*){
+  let $ast := map {
+      "name" : $property/string(@name), 
+      "class" : "scaproperty", 
+      "draggable" : "false",
+      "width" : $const:PROPERTY_WIDTH, 
+      "height" : $const:PROPERTY_HEIGHT, 
+      "title" : $property/string(@name) || "=" || $property/string(@value), 
+      "description" : $property/string(@name) || "=" || $property/string(@value),
+      "y" : 0, 
+      "x" : $const:SPACING + $pos * ($const:PROPERTY_WIDTH + $const:SPACING)
+  }
+  return $ast
 };
 
 
@@ -113,9 +130,10 @@ declare function _:visit-wires($composite as element()){
 };
 
 declare function _:visit-wire($wire as element()){
-  svg:build-wire(
+  (:svg:build-wire(
     $wire/string(@source), $wire/string(@target), map{ "path" : <path d="M0,0 L10,0 L10,10, L0,10"/>}
-  )
+  ):)
+  ()
 };
 
 declare function _:compute-wires($scacomposite as element(sca:composite)){
@@ -128,6 +146,37 @@ declare function _:compute-wires($scacomposite as element(sca:composite)){
                           return <sca:wire source="{$src}" target="{$tgt}"/>
   return ($explicitwires, $implicitwires)
 };
+
+declare function _:estimate-component-width($info as map(*)){
+   map:put($info, "width",
+           $const:COMPONENT_WIDTH + count($info('properties')) * ($const:PROPERTY_WIDTH + $const:SPACING)
+   )
+};
+
+declare function _:estimate-component-height($info as map(*)){
+   map:put($info, "height",
+           $const:COMPONENT_HEIGHT + 
+           max((count($info('services')), count($info('references')))) * 
+           ($const:ARROW_HEIGHT + $const:SPACING)
+   )
+};
+
+declare function _:estimate-composite-width($info as map(*)){
+   map:put($info, "width",
+           max(($const:COMPOSITE_WIDTH,
+             sum($info('components') ! map:get(., "width"))
+           )) 
+   )
+};
+
+declare function _:estimate-composite-height($info as map(*)){
+   map:put($info, "height",
+           max(($const:COMPOSITE_WIDTH,
+             sum($info('components') ! map:get(., "height"))
+           )) 
+   )
+};
+
 
 (:
 declare variable $_:SPACING := 10;
