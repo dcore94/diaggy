@@ -3,7 +3,17 @@ svg > text {
 	stroke: black;
 }
 
+.canvas {
+	position:absolute;
+	width:100%;
+	height:100%;
+}
+
 .composite.scacomposite {
+	position:absolute;	
+}
+
+.composite.scacomposite > svg {
 	fill:#81d4fa;
 	stroke-width:1;
 	stroke:#333333;
@@ -11,6 +21,10 @@ svg > text {
 }
 
 .composite.scacomponent {
+	position:absolute;
+}
+
+.composite.scacomponent > svg{
 	fill:#4fc3f7;
 	stroke-width:1;
 	stroke:#333333;
@@ -18,6 +32,10 @@ svg > text {
 }
 
 .component.scaservice {
+	position:absolute;
+}
+
+.component.scaservice > svg{
 	fill:rgb(0,155,10);
 	stroke-width:1;
 	stroke:#333333;
@@ -25,12 +43,20 @@ svg > text {
 }
 
 .component.scareference {
+	position: absolute;
+}
+
+.component.scareference > svg{
 	fill:rgb(200,155,155);
 	stroke-width:1;
 	stroke:#333333;
 }
 
-.component.scaproperty {
+.component.property {
+	position: absolute;	
+}
+
+.component.property > svg{
 	fill:yellow;
 	stroke-width:1;
 	stroke:#333333;

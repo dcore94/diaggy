@@ -1,64 +1,78 @@
-var dragged = null;
+var dragged = null
+
+function move(target, dx, dy){
+	moveto(target, target.offsetLeft + dx, target.offsetTop + dy)
+}
+
+function moveto(target, x, y){
+	target.style.left = x + "px"
+	target.style.top = y + "px"
+}
+
+function resize(target, dw, dh){
+	resizeto(target, target.offsetWidth + dw, target.offsetHeight + dh)
+}
+
+function resizeto(target, w, h){
+	target.style.width = w + "px"
+	target.style.height = h + "px"
+}
 
 function select(evt){
-    var svg = evt.target.ownerSVGElement
-    while (svg.getAttributeNS(null, "draggable") == 'false'){
-    	svg = svg.ownerSVGElement
-    	if (svg.ownerSVGElement == null) return;
-    }    
-    console.log("dragging", svg)
-    svg.setAttributeNS(null, "onmousemove", "drag(evt)")
-    svg.setAttributeNS(null, "onmouseup", "unselect(evt)")
-    svg.setAttributeNS(null, "onmouseout", "unselect(evt)")
-    dragged = svg
-    evt.preventDefault(true)
-    return false;
+	var tgt = evt.target.ownerSVGElement.parentNode
+	while (tgt.getAttributeNS(null, "draggable") == 'false'){
+		if (tgt.parentNode.getAttribute("name") == "canvas") return;
+		tgt = tgt.parentNode
+	}
+	tgt.setAttributeNS(null, "onmousemove", "drag(event)")
+	tgt.setAttributeNS(null, "onmouseup", "unselect(event)")
+	tgt.setAttributeNS(null, "onmouseout", "unselect(event)")
+	dragged = tgt
+	evt.preventDefault(true)
+	return false;
 }
 
 function drag(evt){
-    var x = (evt['movementX'] ? evt.movementX : ( evt['mozMovementX'] ? evt['mozMovementX'] : 0))
-    var y = (evt['movementY'] ? evt.movementY : ( evt['mozMovementY'] ? evt['mozMovementY'] : 0))
-    dragged.setAttributeNS(null, "x", dragged.x.baseVal.value + x)
-    dragged.setAttributeNS(null, "y", dragged.y.baseVal.value + y)
-    evt.preventDefault(true)
-    return false;
+	var x = (evt['movementX'] ? evt.movementX : ( evt['mozMovementX'] ? evt['mozMovementX'] : 0))
+	var y = (evt['movementY'] ? evt.movementY : ( evt['mozMovementY'] ? evt['mozMovementY'] : 0))
+	move(dragged, x, y)
+	evt.preventDefault(true)
+	return false;
 }
 
+
 function unselect(evt){
-    dragged.removeAttributeNS(null, "onmouseup")
-    dragged.removeAttributeNS(null, "onmouseout")    
-    dragged.removeAttributeNS(null, "onmousemove")
-    cache(dragged)
-    dragged = null
-    evt.preventDefault(true)
-    return false;
+	dragged.removeAttributeNS(null, "onmouseup")
+	dragged.removeAttributeNS(null, "onmouseout")    
+	dragged.removeAttributeNS(null, "onmousemove")
+	cache(dragged)
+	dragged = null
+	evt.preventDefault(true)
+	return false;
 }
 
 var visualcache = {}
-function cache(svg){
-	var name = svg.getAttributeNS(null, 'name') 
+function cache(ele){
+	var name = ele.getAttributeNS(null, 'name') 
 	var cacheentry = 
-			{ "x" : dragged.x.baseVal.value, "y" : dragged.y.baseVal.value, 
-			  "width" : dragged.width.baseVal.value, "height" : dragged.height.baseVal.value 
-			}
+			{ "left" : dragged.offsetLeft, "top" : dragged.offsetTop, "width" : dragged.offsetWidth, "height" : dragged.offsetHeight }
 	visualcache[name] = cacheentry
+	//console.log("added cache entry", name, cacheentry)
 }
 
-function overridefromcache(svg){
-	var name = svg.getAttributeNS(null, 'name') 
+function overridefromcache(ele){
+	var name = ele.getAttributeNS(null, 'name') 
 	if (visualcache[name]) {
 		var cached = visualcache[name]
-		svg.setAttributeNS(null, "x", cached['x'])
-		svg.setAttributeNS(null, "y", cached['y'])
-		console.log(svg.width.baseVal.value , cached['width'])
-		if (svg.width.baseVal.value > cached['width']) svg.setAttributeNS(null, "width", cached['width']);
-		if (svg.height.baseVal.value > cached['height']) svg.setAttributeNS(null, "height", cached['height']);
+		//console.log("found in cache", name, cached[name])
+		moveto(ele, cached['left'], cached['top'])
+		resizeto(ele, cached['width'], cached['height'])
 	}
 }
 
 function overrideallfromcache(){
-	var svgs = document.querySelectorAll("svg")
-	for(var i=0; i < svgs.length; i++){
-		overridefromcache(svgs[i])
+	var divs = document.querySelector("div [name='canvas']").querySelectorAll("div")
+	for(var i=0; i < divs.length; i++){
+		overridefromcache(divs[i])
 	}
 }

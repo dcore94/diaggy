@@ -4,14 +4,14 @@ declare namespace svg="http://www.w3.org/2000/svg";
 declare namespace xlink="http://www.w3.org/1999/xlink";
 
 declare function _:emit-root($content as element()*, $info as map(*)){
-  <svg name="canvas" class="canvas" width="100%" height="100%">
+  <svg name="canvas" class="canvas" width="100%" height="100%" onresize="console.log('resizing canvas', this)">
     {$content}
   </svg>
 };
 
 declare function _:emit-composite($content as element()*, $info as map(*)){
   <svg name="{$info('name')}" class="composite {$info('class')}" 
-    width="{$info('width')}" height="{$info('height')}" onmousedown="select(evt)">
+    width="{$info('width')}" height="{$info('height')}" onmousedown="select(evt)" onresize="console.log('resizing', this)">
     { if (map:contains($info, 'draggable')) then attribute draggable { $info('draggable') } else ()}
     { if (map:contains($info, 'x')) then attribute x { $info('x') } else ()}
     { if (map:contains($info, 'y')) then attribute y { $info('y') } else ()}

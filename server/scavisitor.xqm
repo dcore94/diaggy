@@ -72,7 +72,7 @@ declare function _:visit-service($service as element(),  $pos as xs:integer, $co
       "width" : $const:ARROW_LENGTH, 
       "height" : $const:ARROW_HEIGHT, 
       "y" : $const:PROPERTY_HEIGHT + $const:SPACING + ($pos - 1) * ($const:ARROW_HEIGHT + $const:SPACING),
-      "x" : 0,
+      "x" : -$const:ARROW_LENGTH_HALF,
       "title" : $service/string(@name), 
       "description" : $service/string(@name)
   }
@@ -94,7 +94,7 @@ declare function _:visit-reference($reference as element(), $pos as xs:integer, 
       "width" : $const:ARROW_LENGTH, 
       "height" : $const:ARROW_HEIGHT, 
       "y" : $const:PROPERTY_HEIGHT + $const:SPACING + ($pos - 1) * ($const:ARROW_HEIGHT + $const:SPACING), 
-      "x" : "100%",
+      "-x" : -$const:ARROW_LENGTH_HALF,
       "title" : $reference/string(@name), 
       "description" : $reference/string(@name)
   }
