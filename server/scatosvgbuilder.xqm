@@ -14,10 +14,10 @@ declare function _:build-composite($info as map(*)) as element(){
       <text x="60%" y="5%">{$info('name')}</text>   
       <title>{$info("title")}</title>
       <description>{$info("description")}</description>
+      {$info('wires') ! _:build-wire(.)}
     </svg>,
     ($info('components') ! _:build-component(.),
-     $info('properties') ! _:build-property(.),
-     $info('wires') ! _:build-wire(.)),
+     $info('properties') ! _:build-property(.)),
      $info)
 };
 
@@ -72,5 +72,5 @@ declare function _:build-property($info as map(*)) as element()*{
 };
 
 declare function _:build-wire($info as map(*)) as element()*{
-  ()
+  html:emit-wire($info('source'), $info('target'), $info)
 };

@@ -42,11 +42,16 @@ declare function _:emit-component($svg as element()?, $content as element()*, $i
 };
 
 declare function _:emit-wire($source as xs:string, $target as xs:string, $info as map(*)){
-  <svg class="wire {$info('class')}" onmousedown="select(event)">
-    {$info("path")}
+  
+  let $sourcex := if ( map:contains($info, "sourcex")) then $info("sourcex") else 0
+  let $sourcey := if ( map:contains($info, "sourcey")) then $info("sourcey") else 0
+  let $targetx := if ( map:contains($info, "targetx")) then $info("targetx") else 0
+  let $targety := if ( map:contains($info, "targety")) then $info("targety") else 0
+  return
+  <path d="M10,10 L100,100" class="wire {$info('class')}">
     <metadata>
-      <src name="{$source}" ofsx="0" ofsy="0"/>
-      <tgt name="{$target}" ofsx="0" ofsy="0"/>
+      <source path="{$source}" x="{$sourcex}" y="{$sourcey}"/>
+      <target path="{$target}" x="{$targetx}" y="{$targety}"/>
     </metadata>
-  </svg>
+  </path>
 };

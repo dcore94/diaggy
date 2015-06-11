@@ -52,11 +52,11 @@ svg > text {
 	stroke:#333333;
 }
 
-.component.property {
-	position: absolute;	
+.component.scaproperty {
+	position: absolute;
 }
 
-.component.property > svg{
+.component.scaproperty > svg{
 	fill:yellow;
 	stroke-width:1;
 	stroke:#333333;
@@ -68,7 +68,7 @@ svg > text {
 	stroke:#333333;
 }
 
-.wire {
+.scawire {
 	stroke-width:2;
 	stroke:black;
     fill:none;

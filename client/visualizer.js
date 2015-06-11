@@ -36,6 +36,7 @@ function drag(evt){
 	var x = (evt['movementX'] ? evt.movementX : ( evt['mozMovementX'] ? evt['mozMovementX'] : 0))
 	var y = (evt['movementY'] ? evt.movementY : ( evt['mozMovementY'] ? evt['mozMovementY'] : 0))
 	move(dragged, x, y)
+	drawwires()
 	evt.preventDefault(true)
 	return false;
 }
@@ -74,5 +75,44 @@ function overrideallfromcache(){
 	var divs = document.querySelector("div [name='canvas']").querySelectorAll("div")
 	for(var i=0; i < divs.length; i++){
 		overridefromcache(divs[i])
+	}
+}
+
+function pathtocoords(path){
+	var div = document.querySelector("div.canvas")
+	var x = 0
+	var y = 0
+	for(var i=0; i < path.length; i++){
+		div = div.querySelector("div[name='" + path[i] + "']")
+		x += div.offsetLeft
+		y += div.offsetTop
+		console.log(div.getAttribute('name'), div.offsetLeft, div.offsetTop)
+	}
+	return [x, y]
+}
+
+function drawwire(wire){
+	var source = wire.querySelector("metadata>source")
+	var sourcepath = source.getAttribute("path").split("/")
+	var sourcex = source.getAttribute("x")
+	var sourcey = source.getAttribute("y")
+	
+	var target = wire.querySelector("metadata>target")
+	var targetpath = target.getAttribute("path").split("/")
+	var targetx = target.getAttribute("x")
+	var targety = target.getAttribute("y")
+	
+	var co1 = pathtocoords(sourcepath)
+	var co2 = pathtocoords(targetpath)
+	
+	var d = "M" + co1[0] + "," + co1[1] + " l" + sourcex + "," + sourcey + " L" + co2[0] + "," + co2[1] + " l" + targetx + "," + targety
+	
+	wire.setAttributeNS(null, "d", d)
+}
+
+function drawwires(){
+	var wires = document.querySelectorAll(".wire")
+	for(var i=0; i < wires.length; i++){
+		drawwire(wires[i])
 	}
 }

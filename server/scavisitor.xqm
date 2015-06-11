@@ -13,9 +13,11 @@ declare function _:visit($sca as node()) as map(*){
 declare function _:visit-composite($composite as element(),  $pos as xs:integer, $count as xs:integer) as map(*){
   let $components := _:visit-components($composite)
   let $properties := _:visit-properties($composite)
+  let $wires := _:visit-wires($composite)
   let $ast:= map {
         "components" : $components,
         "properties" : $properties,
+        "wires" : $wires,
         "name" : $composite/string(@name),
         "class" : "scacomposite",
         "draggable" : "true", 
@@ -116,12 +118,11 @@ declare function _:visit-property($property as element(), $pos as xs:integer, $c
       "height" : $const:PROPERTY_HEIGHT, 
       "title" : $property/string(@name) || "=" || $property/string(@value), 
       "description" : $property/string(@name) || "=" || $property/string(@value),
-      "y" : 0, 
+      "y" : -$const:PROPERTY_HEIGHT div 2, 
       "x" : $const:SPACING + $pos * ($const:PROPERTY_WIDTH + $const:SPACING)
   }
   return $ast
 };
-
 
 declare function _:visit-wires($composite as element()){
   let $wires := _:compute-wires($composite)
@@ -130,10 +131,17 @@ declare function _:visit-wires($composite as element()){
 };
 
 declare function _:visit-wire($wire as element()){
-  (:svg:build-wire(
-    $wire/string(@source), $wire/string(@target), map{ "path" : <path d="M0,0 L10,0 L10,10, L0,10"/>}
-  ):)
-  ()
+  let $ast := map {
+      "source" : $wire/string(@source),
+      "sourcex" : $const:ARROW_LENGTH,
+      "sourcey" : $const:ARROW_HEIGHT_HALF,
+      "target" : $wire/string(@target),
+      "targetx" : 10,
+      "targety" : $const:ARROW_HEIGHT_HALF,
+      "class" : "scawire", 
+      "draggable" : "false"
+  }
+  return $ast
 };
 
 declare function _:compute-wires($scacomposite as element(sca:composite)){
