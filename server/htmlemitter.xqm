@@ -22,6 +22,9 @@ declare function _:emit-attrs($info as map(*)) as attribute()+ {
   },
   attribute draggable {
     if (map:contains($info, 'draggable')) then $info("draggable") else "false"
+  },
+  attribute title {
+    if (map:contains($info, 'title')) then $info("title") else ""
   }
 };
 
@@ -43,15 +46,15 @@ declare function _:emit-component($svg as element()?, $content as element()*, $i
 
 declare function _:emit-wire($source as xs:string, $target as xs:string, $info as map(*)){
   
-  let $sourcex := if ( map:contains($info, "sourcex")) then $info("sourcex") else 0
-  let $sourcey := if ( map:contains($info, "sourcey")) then $info("sourcey") else 0
-  let $targetx := if ( map:contains($info, "targetx")) then $info("targetx") else 0
-  let $targety := if ( map:contains($info, "targety")) then $info("targety") else 0
+  let $prolog := if ( map:contains($info, "prolog")) then $info("prolog") else " m0,0"
+  let $epilog := if ( map:contains($info, "epilog")) then $info("epilog") else " m0,0"
+  let $ofsx := if ( map:contains($info, "ofsx")) then $info("ofsx") else 0
+  let $ofsy := if ( map:contains($info, "ofsy")) then $info("ofsy") else 0
   return
-  <path d="M10,10 L100,100" class="wire {$info('class')}">
+  <path d="M0,0" class="wire {$info('class')}">
     <metadata>
-      <source path="{$source}" x="{$sourcex}" y="{$sourcey}"/>
-      <target path="{$target}" x="{$targetx}" y="{$targety}"/>
+      <source path="{$source}" prolog="{$prolog}"/>
+      <target path="{$target}" epilog="{$epilog}" ofsx="{$ofsx}" ofsy="{$ofsy}"/>
     </metadata>
   </path>
 };

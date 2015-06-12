@@ -94,19 +94,21 @@ function pathtocoords(path){
 function drawwire(wire){
 	var source = wire.querySelector("metadata>source")
 	var sourcepath = source.getAttribute("path").split("/")
-	var sourcex = source.getAttribute("x")
-	var sourcey = source.getAttribute("y")
 	
 	var target = wire.querySelector("metadata>target")
 	var targetpath = target.getAttribute("path").split("/")
-	var targetx = target.getAttribute("x")
-	var targety = target.getAttribute("y")
+	
+	var ofsx = Number(target.getAttribute("ofsx"))
+	var ofsy = Number(target.getAttribute("ofsy"))
 	
 	var co1 = pathtocoords(sourcepath)
 	var co2 = pathtocoords(targetpath)
 	
-	var d = "M" + co1[0] + "," + co1[1] + " l" + sourcex + "," + sourcey + " L" + co2[0] + "," + co2[1] + " l" + targetx + "," + targety
-	
+	var origin = "M" + co1[0] + "," + co1[1]
+	var prolog = source.getAttribute("prolog")
+	var epilog = target.getAttribute("epilog")
+	var d = origin + prolog + " L" + (co2[0] + ofsx) + "," + (co2[1] + ofsy) + epilog
+	console.log(ofsx, ofsy, d)
 	wire.setAttributeNS(null, "d", d)
 }
 

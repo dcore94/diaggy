@@ -13,17 +13,20 @@ declare function _:visit($sca as node()) as map(*){
 declare function _:visit-composite($composite as element(),  $pos as xs:integer, $count as xs:integer) as map(*){
   let $components := _:visit-components($composite)
   let $properties := _:visit-properties($composite)
+  let $services := _:visit-services($composite)
+  let $references := _:visit-references($composite)
   let $wires := _:visit-wires($composite)
   let $ast:= map {
         "components" : $components,
         "properties" : $properties,
+        "services" : $services,
+        "references" : $references,
         "wires" : $wires,
         "name" : $composite/string(@name),
         "class" : "scacomposite",
         "draggable" : "true", 
         "title" : $composite/string(@name), 
         "description" : $composite/string(@name),
-
         "width" : $const:COMPOSITE_WIDTH, 
         "height" : $const:COMPOSITE_HEIGHT
   }
@@ -133,11 +136,10 @@ declare function _:visit-wires($composite as element()){
 declare function _:visit-wire($wire as element()){
   let $ast := map {
       "source" : $wire/string(@source),
-      "sourcex" : $const:ARROW_LENGTH,
-      "sourcey" : $const:ARROW_HEIGHT_HALF,
+      "prolog" : " m" || $const:ARROW_LENGTH || "," || $const:ARROW_HEIGHT_HALF || " l10,0",
+      "epilog" : " l10,0",
       "target" : $wire/string(@target),
-      "targetx" : 10,
-      "targety" : $const:ARROW_HEIGHT_HALF,
+      "ofsy" : $const:ARROW_HEIGHT_HALF,
       "class" : "scawire", 
       "draggable" : "false"
   }
@@ -152,7 +154,12 @@ declare function _:compute-wires($scacomposite as element(sca:composite)){
                           let $tgt := $reference/string(@target)
                           let $src := $component/string(@name) || "/" || $reference/string(@name)
                           return <sca:wire source="{$src}" target="{$tgt}"/>
-  return ($explicitwires, $implicitwires)
+  let $promotionwires := (
+      $scacomposite/sca:service ! <sca:wire source="{./@name}" target="{./@promote}"/>,
+      $scacomposite/sca:reference ! <sca:wire source="{./@promote}" target="{./@name}"/>
+  )
+  
+  return ($explicitwires, $implicitwires, $promotionwires)
 };
 
 declare function _:estimate-component-width($info as map(*)){

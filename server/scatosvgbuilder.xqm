@@ -16,9 +16,11 @@ declare function _:build-composite($info as map(*)) as element(){
       <description>{$info("description")}</description>
       {$info('wires') ! _:build-wire(.)}
     </svg>,
-    ($info('components') ! _:build-component(.),
+    ($info('services') ! _:build-service(.),
+     $info('references') ! _:build-reference(.),
+     $info('components') ! _:build-component(.),
      $info('properties') ! _:build-property(.)),
-     $info)
+     $info), admin:write-log(map:serialize($info))
 };
 
 declare function _:build-component($info as map(*)) as element()*{
