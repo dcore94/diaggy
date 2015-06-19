@@ -72,6 +72,10 @@ svg > text {
 	padding: 0px;
 }
 
+.component.scaproperty:hover {
+	overflow:visbile;
+}
+
 .component.scaproperty > svg{
 	fill:yellow;
 	stroke-width:1;
