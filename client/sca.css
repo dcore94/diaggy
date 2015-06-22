@@ -3,6 +3,10 @@ svg > text {
 	stroke: black;
 }
 
+div.selected {
+	border: 4px solid red;
+}
+
 .canvas {
 	position:absolute;
 	width:100%;
@@ -12,7 +16,6 @@ svg > text {
 .composite.scacomposite {
 	position:absolute;
 	resize: both;
-	border: 0px;
 	margin: 0px;
 	padding: 0px;
 }
@@ -26,7 +29,6 @@ svg > text {
 
 .composite.scacomponent {
 	position:absolute;
-	border: 0px;
 	margin: 0px;
 	padding: 0px;
 }
@@ -40,7 +42,6 @@ svg > text {
 
 .component.scaservice {
 	position:absolute;
-	border: 0px;
 	margin: 0px;
 	padding: 0px;
 }
@@ -54,7 +55,6 @@ svg > text {
 
 .component.scareference {
 	position: absolute;
-	border: 0px;
 	margin: 0px;
 	padding: 0px;
 }
@@ -67,7 +67,6 @@ svg > text {
 
 .component.scaproperty {
 	position: absolute;
-	border: 0px;
 	margin: 0px;
 	padding: 0px;
 }

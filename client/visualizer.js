@@ -1,4 +1,5 @@
 var dragged = null
+var selected = null
 
 function move(target, dx, dy){
 	moveto(target, target.offsetLeft + dx, target.offsetTop + dy)
@@ -18,16 +19,27 @@ function resizeto(target, w, h){
 	target.style.height = h + "px"
 }
 
+function toggleselection(tgt){
+	if(selected != null){
+		selected.classList.remove("selected")
+	}
+	if(tgt != null) tgt.classList.add("selected")
+	selected = tgt;
+}
+
 function select(evt){
 	var tgt = evt.target.ownerSVGElement.parentNode
 	while (tgt.getAttributeNS(null, "draggable") == 'false'){
-		if (tgt.parentNode.getAttribute("name") == "canvas") return;
+		if (tgt.parentNode.getAttribute("name") == "canvas") {
+			toggleselection(null)
+		};
 		tgt = tgt.parentNode
 	}
 	tgt.setAttributeNS(null, "onmousemove", "drag(event)")
 	tgt.setAttributeNS(null, "onmouseup", "unselect(event)")
 	tgt.setAttributeNS(null, "onmouseout", "unselect(event)")
 	dragged = tgt
+	toggleselection(tgt)
 	evt.preventDefault(true)
 	return false;
 }
@@ -50,6 +62,12 @@ function unselect(evt){
 	dragged = null
 	evt.preventDefault(true)
 	return false;
+}
+
+function handleKey(event){
+	if (event.keyCode === 27){
+		toggleselection()
+	}
 }
 
 var visualcache = {}
