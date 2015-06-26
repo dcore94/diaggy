@@ -45,10 +45,12 @@ declare function _:visit-component($component as element(), $pos as xs:integer, 
   let $services := _:visit-services($component)
   let $references := _:visit-references($component)
   let $properties := _:visit-properties($component)
+  let $implementations := _:visit-implementations($component)
   let $ast := map {
       "services" : $services,
       "references" : $references,
       "properties" : $properties,
+      "implementations" : $implementations,
       "name" : $component/string(@name), 
       "class" : "scacomponent",
       "draggable" : "true", 
@@ -123,6 +125,29 @@ declare function _:visit-property($property as element(), $pos as xs:integer, $c
       "description" : $property/string(@name) || "=" || $property/string(@value),
       "y" : -$const:PROPERTY_HEIGHT div 2, 
       "x" : $const:SPACING + $pos * ($const:PROPERTY_WIDTH + $const:SPACING)
+  }
+  return $ast
+};
+
+declare function _:visit-implementations($component as element()) as map(*)*{
+  $component/*[matches(local-name(),"^implementation.*")] ! _:visit-implementation(.)
+};
+
+declare function _:visit-implementation($implementation as element()) as map(*){
+  let $name := 
+    if ( exists($implementation/@name) ) then $implementation/string(@name)
+    else if (exists($implementation/@xsi:type)) then substring-after($implementation/string(@xsi:type), ":")
+    else substring-after(local-name($implementation), ".")
+  let $ast := map {
+      "name" : $name,
+      "class" : "scaimplementation", 
+      "draggable" : "false",
+      "width" : $const:IMPLEMENTATION_WIDTH,
+      "height" : $const:IMPLEMENTATION_HEIGHT, 
+      "title" : $name, 
+      "description" : "implementation " || $name,
+      "-y" : - ($const:IMPLEMENTATION_HEIGHT div 2), 
+      "x" : $const:SPACING
   }
   return $ast
 };

@@ -32,7 +32,8 @@ declare function _:build-component($info as map(*)) as element()*{
     (
      $info('services') ! _:build-service(.),
      $info('references') ! _:build-reference(.),
-     $info('properties') ! _:build-property(.)
+     $info('properties') ! _:build-property(.),
+     $info('implementations') ! _:build-implementation(.)
     ),
     $info)
 };
@@ -66,6 +67,18 @@ declare function _:build-property($info as map(*)) as element()*{
     <svg style="width:100%;height:100%">
       <rect width="100%" height="100%"/>
       <text y="{$const:PROPERTY_HEIGHT div 2}">{$info('name')}</text>
+      <title>{$info("title")}</title>
+      <description>{$info("description")}</description>
+    </svg>,
+    (),
+    $info)
+};
+
+declare function _:build-implementation($info as map(*)) as element()*{
+  html:emit-component(
+    <svg style="width:100%;height:100%">
+      <rect rx="10" ry="10" width="100%" height="100%"/>
+      <text y="{$const:IMPLEMENTATION_HEIGHT div 2}">{$info('title')}</text>
       <title>{$info("title")}</title>
       <description>{$info("description")}</description>
     </svg>,

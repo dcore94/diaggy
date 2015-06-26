@@ -5,6 +5,11 @@ svg > text {
 
 div.selected {
 	border: 4px solid red;
+	box-shadow: 10px 10px 5px #888888;
+}
+
+div:focus {
+	border: none;
 }
 
 .canvas {
@@ -18,6 +23,7 @@ div.selected {
 	resize: both;
 	margin: 0px;
 	padding: 0px;
+	border-radius: 10px;
 }
 
 .composite.scacomposite > svg {
@@ -31,6 +37,7 @@ div.selected {
 	position:absolute;
 	margin: 0px;
 	padding: 0px;
+	border-radius: 10px;
 }
 
 .composite.scacomponent > svg{
@@ -81,8 +88,18 @@ div.selected {
 	stroke:#333333;
 }
 
-.component.implementation {
-	fill:dd1111;
+.component.scaimplementation {
+	position: absolute;
+	margin: 0px;
+	padding: 0px;
+}
+
+.component.scaimplementation:hover {
+	overflow:visbile;
+}
+
+.component.scaimplementation > svg {
+	fill: orange;
 	stroke-width:1;
 	stroke:#333333;
 }

@@ -16,3 +16,5 @@ declare variable $_:COMPONENT_WIDTH := 150;
 declare variable $_:COMPONENT_HEIGHT := 100;
 declare variable $_:PROPERTY_WIDTH := 20;
 declare variable $_:PROPERTY_HEIGHT := 30;
+declare variable $_:IMPLEMENTATION_WIDTH := 150;
+declare variable $_:IMPLEMENTATION_HEIGHT := 30;
