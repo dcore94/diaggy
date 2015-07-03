@@ -75,7 +75,7 @@ declare function _:visit-service($service as element(),  $pos as xs:integer, $co
   let $ast := map {
       "name" : $service/string(@name), 
       "class" : "scaservice", 
-      "draggable" : "false",
+      "draggable" : "y-true",
       "width" : $const:ARROW_LENGTH, 
       "height" : $const:ARROW_HEIGHT, 
       "y" : $const:PROPERTY_HEIGHT + $const:SPACING + ($pos - 1) * ($const:ARROW_HEIGHT + $const:SPACING),
@@ -97,7 +97,7 @@ declare function _:visit-reference($reference as element(), $pos as xs:integer, 
   let $ast := map {
       "name" : $reference/string(@name), 
       "class" : "scareference", 
-      "draggable" : "false",
+      "draggable" : "y-true",
       "width" : $const:ARROW_LENGTH, 
       "height" : $const:ARROW_HEIGHT, 
       "y" : $const:PROPERTY_HEIGHT + $const:SPACING + ($pos - 1) * ($const:ARROW_HEIGHT + $const:SPACING), 

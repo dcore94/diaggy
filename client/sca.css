@@ -1,15 +1,20 @@
 svg > text {
 	fill: black;
 	stroke: black;
+	stroke-width:1px;
+}
+
+div {
+	cursor: auto;
 }
 
 div.selected {
-	border: 4px solid red;
-	box-shadow: 10px 10px 5px #888888;
+	border: 2px solid red;
+	box-shadow: 5px 5px 5px #888888;
 }
 
-div:focus {
-	border: none;
+div.dragged {
+	cursor: move;
 }
 
 .canvas {
@@ -29,8 +34,8 @@ div:focus {
 .composite.scacomposite > svg {
 	fill:#81d4fa;
 	stroke-width:1;
-	stroke:#333333;
-	cursor: move;
+	stroke: black;
+	shape-rendering: geometricPrecision;
 }
 
 .composite.scacomponent {
@@ -43,8 +48,8 @@ div:focus {
 .composite.scacomponent > svg{
 	fill:#4fc3f7;
 	stroke-width:1;
-	stroke:#333333;
-	cursor: move;
+	stroke: darkblue;
+	shape-rendering: geometricPrecision;
 }
 
 .component.scaservice {
@@ -56,8 +61,8 @@ div:focus {
 .component.scaservice > svg{
 	fill:rgb(0,155,10);
 	stroke-width:1;
-	stroke:#333333;
-	cursor: arrow;
+	stroke: darkgreen;
+	shape-rendering: geometricPrecision;
 }
 
 .component.scareference {
@@ -69,7 +74,8 @@ div:focus {
 .component.scareference > svg{
 	fill:rgb(200,155,155);
 	stroke-width:1;
-	stroke:#333333;
+	stroke: darkred;
+	shape-rendering: geometricPrecision;
 }
 
 .component.scaproperty {
@@ -85,13 +91,15 @@ div:focus {
 .component.scaproperty > svg{
 	fill:yellow;
 	stroke-width:1;
-	stroke:#333333;
+	stroke: brown;
+	shape-rendering: geometricPrecision;
 }
 
 .component.scaimplementation {
 	position: absolute;
 	margin: 0px;
 	padding: 0px;
+	overflow: hidden;
 }
 
 .component.scaimplementation:hover {
@@ -101,7 +109,8 @@ div:focus {
 .component.scaimplementation > svg {
 	fill: orange;
 	stroke-width:1;
-	stroke:#333333;
+	stroke: darkorange;
+	shape-rendering: geometricPrecision;
 }
 
 .scawire {
