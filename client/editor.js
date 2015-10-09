@@ -14,6 +14,10 @@ function getRenderUrl(){
 	return "/diaggy/render/" + getProfile() 
 }
 
+function getExportUrl(){
+	return "/diaggy/export" 
+}
+
 function ignoreerrorcb(error, data, xhr){
 	return
 }

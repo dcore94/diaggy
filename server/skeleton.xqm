@@ -1,4 +1,6 @@
 module namespace sk = "urn:dcore:diaggy:skeleton";
+
+import module namespace diaggy = "urn:dcore:diaggy:implementation" at "diaggy.xqm";
 import module namespace sca = "urn:dcore:diaggy:profile:sca" at "sca.xqm";
 
 declare variable $sk:IMPL := map {
@@ -66,4 +68,22 @@ function sk:render($body, $profile as xs:string){
   else
     let $f := sk:get-implforprofile($profile, "render", 1)
     return $f($body)
+};
+
+declare 
+%rest:path("diaggy/export")
+%rest:POST("{$body}")
+%rest:consumes("application/xml")
+function sk:export($body){
+  sk:export($body, "svg")
+}; 
+
+declare 
+%rest:path("diaggy/export/{$format}")
+%rest:POST("{$body}")
+%rest:consumes("application/xml")
+function sk:export($body, $format as xs:string){
+prof:time(	
+  diaggy:export($body, $format), false(), $body
+)
 };   

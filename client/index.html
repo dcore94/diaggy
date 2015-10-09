@@ -12,10 +12,11 @@
 		</script>
 	</head>
 	<body>
+		<select id="PROFILE_SELECTOR">
+			<option value="sca">SCA</option>
+		</select>
+		<input type="button" onclick="exportSVG()" value="Export SVG"/>
 		<div id="SCAFRAME" class="scaeditor">
-			<select id="PROFILE_SELECTOR">
-				<option value="sca">SCA</option>
-			</select>
 			<textarea id="SCAEDITOR" name="SCAEDITOR"></textarea>
 		</div>
 		<div id="SVGFRAME" class="svgeditor" onmouseover="this.focus()" onkeyup="handleKey(event)" tabindex="-1">
@@ -67,6 +68,17 @@
 				var content = editor.getDoc().getValue()
 				var url = getRenderUrl()
 				xhr(url, setsvg, ignoreerrorcb, "POST", content, "application/xml");
+			}
+			
+			function exportSVG(){
+				var content = document.querySelector("div[name='canvas']").outerHTML
+				var url = getExportUrl()
+				console.log(content)
+				xhr(url, exported, defaulterrorcb, "POST", content, "application/xml");
+			}
+			
+			function exported(data){
+				console.log(data)
 			}
 			
 			function errormarker(content) {

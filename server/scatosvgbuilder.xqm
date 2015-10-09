@@ -25,7 +25,7 @@ declare function _:build-composite($info as map(*)) as element(){
 
 declare function _:build-component($info as map(*)) as element()*{
   html:emit-composite(
-    <svg style="width:100%;height:100%">
+    <svg style="width:100%;height:100%;overflow:visible" >
       <rect rx="10" ry="10" width="100%" height="100%"/>
       <text x="{$const:ARROW_LENGTH + $const:SPACING}" y="50%">{$info('name')}</text>
     </svg>,
@@ -40,7 +40,7 @@ declare function _:build-component($info as map(*)) as element()*{
 
 declare function _:build-service($info as map(*)) as element()*{
   html:emit-component(
-    <svg style="width:100%;height:100%">
+    <svg style="width:100%;height:100%;overflow:visible">
       <polygon points="{$const:ARROW_POINTS}"/>
       <text x="35%" y="85%">{$info('name')}</text>
       <title>{$info("title")}</title>
@@ -52,7 +52,7 @@ declare function _:build-service($info as map(*)) as element()*{
 
 declare function _:build-reference($info as map(*)) as element()*{
   html:emit-component(
-    <svg style="width:100%;height:100%">
+    <svg style="width:100%;height:100%;overflow:visible">
       <polygon points="{$const:ARROW_POINTS}"/>
       <text x="35%" y="85%">{$info('name')}</text>
       <title>{$info("title")}</title>
@@ -64,7 +64,7 @@ declare function _:build-reference($info as map(*)) as element()*{
 
 declare function _:build-property($info as map(*)) as element()*{
   html:emit-component(
-    <svg style="width:100%;height:100%">
+    <svg style="width:100%;height:100%;overflow:visible">
       <rect width="100%" height="100%"/>
       <text y="{$const:PROPERTY_HEIGHT div 2}">{$info('name')}</text>
       <title>{$info("title")}</title>
@@ -76,7 +76,7 @@ declare function _:build-property($info as map(*)) as element()*{
 
 declare function _:build-implementation($info as map(*)) as element()*{
   html:emit-component(
-    <svg style="width:100%;height:100%">
+    <svg style="width:100%;height:100%;overflow:visible">
       <rect rx="10" ry="10" width="100%" height="100%"/>
       <text y="{$const:IMPLEMENTATION_HEIGHT div 2}">{$info('title')}</text>
       <title>{$info("title")}</title>
